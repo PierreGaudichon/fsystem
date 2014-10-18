@@ -97,8 +97,10 @@
   app.use(express["static"](path.join(__dirname, "node_modules")));
 
   app.get("/root", function(req, res) {
+    var home;
+    home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
     return res.send(JSON.stringify({
-      root: __dirname
+      root: home
     }));
   });
 

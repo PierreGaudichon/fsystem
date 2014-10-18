@@ -20,6 +20,8 @@ class ItemView
 	constructor: (@el) ->
 		@list = @el.find ".list"
 		@content = @el.find ".content"
+		@title = $ "head title"
+		@header = $ "h1"
 
 
 	open: (@path)->
@@ -27,11 +29,15 @@ class ItemView
 			.done (data) =>
 				@item = data
 				@template()
-			.fail -> console.log "fail loading : #{@path}."
+			.fail =>
+				@header.text "Server Error."
+				console.log "fail loading : #{@path}."
 		return null
 
 
 	template: ->
+		@title.text @item.name
+		@header.text "fsystem - #{@item.name}"
 		switch @item.item
 			when "folder" then @templateFolder()
 			when "file" then @templateFile()

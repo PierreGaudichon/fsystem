@@ -84,7 +84,8 @@ app.use express.static path.join __dirname, "node_modules"
 
 
 app.get "/root", (req, res) ->
-	res.send JSON.stringify {root: __dirname}
+	home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
+	res.send JSON.stringify {root: home}
 
 
 app.get "/open", (req, res) ->

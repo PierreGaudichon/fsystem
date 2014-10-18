@@ -23,6 +23,8 @@
       this.el = el;
       this.list = this.el.find(".list");
       this.content = this.el.find(".content");
+      this.title = $("head title");
+      this.header = $("h1");
     }
 
     ItemView.prototype.open = function(path) {
@@ -34,13 +36,18 @@
           _this.item = data;
           return _this.template();
         };
-      })(this)).fail(function() {
-        return console.log("fail loading : " + this.path + ".");
-      });
+      })(this)).fail((function(_this) {
+        return function() {
+          _this.header.text("Server Error.");
+          return console.log("fail loading : " + _this.path + ".");
+        };
+      })(this));
       return null;
     };
 
     ItemView.prototype.template = function() {
+      this.title.text(this.item.name);
+      this.header.text("fsystem - " + this.item.name);
       switch (this.item.item) {
         case "folder":
           return this.templateFolder();
@@ -79,7 +86,7 @@
         };
       })(this));
       this.content.find("h2").text(this.item.name);
-      return this.content.find("pre").text(this.item.content || "Not text file.");
+      return this.content.find("pre").text(this.item.content || "Not a text file.");
     };
 
     ItemView.prototype.templateEmpty = function() {
