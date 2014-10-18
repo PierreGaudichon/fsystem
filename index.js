@@ -78,12 +78,23 @@
       type: "unknown",
       size: stats.size
     };
-    return callback(null, r);
+    if (r.size < Math.pow(10, 5)) {
+      return fs.readFile(r.path, {
+        encoding: "utf-8"
+      }, function(err, data) {
+        r.content = data;
+        return callback(err, r);
+      });
+    } else {
+      return callback(null, r);
+    }
   };
 
   app.use(express["static"](path.join(__dirname, "public")));
 
   app.use(express["static"](path.join(__dirname, "bower_components")));
+
+  app.use(express["static"](path.join(__dirname, "node_modules")));
 
   app.get("/root", function(req, res) {
     return res.send(JSON.stringify({
@@ -96,7 +107,6 @@
     pth = req.query.path;
     console.log("/open : " + pth);
     return fs.lstat(pth, function(err, stats) {
-      console.log(err);
       if (stats.isDirectory()) {
         return readDir(pth, stats, function(err, data) {
           return res.send(JSON.stringify(data));

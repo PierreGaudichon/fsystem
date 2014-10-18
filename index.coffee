@@ -2,6 +2,7 @@ express = require "express"
 path = require "path"
 fs = require "fs"
 _ = require "lodash"
+#istextorbinary = require "istextorbinary"
 app = express()
 
 
@@ -66,12 +67,19 @@ readFile = (pth, stats, callback) ->
 		type: "unknown"
 		size: stats.size
 
-	callback null, r
+	if r.size < 10**5 # 10 ko
+		fs.readFile r.path, {encoding: "utf-8"}, (err, data) ->
+			r.content = data
+			callback err, r
+
+	else
+		callback null, r
 
 
 
 app.use express.static path.join __dirname, "public"
 app.use express.static path.join __dirname, "bower_components"
+app.use express.static path.join __dirname, "node_modules"
 
 
 
@@ -84,7 +92,6 @@ app.get "/open", (req, res) ->
 	console.log "/open : #{pth}"
 
 	fs.lstat pth, (err, stats) ->
-		console.log err
 
 		if stats.isDirectory()
 			readDir pth, stats, (err, data) ->

@@ -3,9 +3,13 @@
   "version": "0.0.1",
   "description": "A simple web interface to the local file system.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/PierreGaudichon/fsystem.git"
+  },
   "scripts": {
     "test": "mocha",
-    "install": "npm install; bower install; sh build_system.sh",
+    "install": "bower install; sh build_system.sh",
     "start": "node index.js"
   },
   "keywords": [
@@ -19,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "~4.9.8",
+    "istextorbinary": "^1.0.0",
     "lodash": "^2.4.1"
   }
 }

@@ -1,5 +1,15 @@
 
 
+parent = (pth) ->
+	pth = _.compact pth.split "/"
+	if pth.length == 0
+		"/"
+	else
+		pth.length -= 1
+		"/" + pth.join "/"
+
+
+
 class ItemView
 
 	el: "jQuery"
@@ -8,6 +18,8 @@ class ItemView
 
 
 	constructor: (@el) ->
+		@list = @el.find ".list"
+		@content = @el.find ".content"
 
 
 	open: (@path)->
@@ -26,15 +38,31 @@ class ItemView
 
 
 	templateFolder: ->
-		@el.empty()
+		@templateEmpty()
 		for item in @item.inside
 			do (item) =>
 				el = $ "<li />"
 					.text item.name
 					.click =>
 						@open item.path
-				@el.append el
+				@list.append el
 		return null
+
+
+	templateFile: ->
+		@templateEmpty()
+		p = parent @item.path
+		@content.find(".parent")
+			.text p
+			.click =>
+				@open p
+		@content.find("h2").text @item.name
+		@content.find("pre").text @item.content || "Not a text file."
+
+
+	templateEmpty: ->
+		@list.empty()
+		@content.children().empty()
 
 
 	initialize: ->
@@ -45,13 +73,11 @@ class ItemView
 				console.log "root : failed"
 
 
-	templateFile: ->
-		#@el.empty()
 
 
 
 $ ->
-	view = new ItemView $ ".list"
+	view = new ItemView $ ".view"
 	view.initialize()
 
 
