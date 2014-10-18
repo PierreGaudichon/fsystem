@@ -1,0 +1,28 @@
+{
+  "name": "fsystem",
+  "main": "index.js",
+  "description": "A simple web interface to the local file system.",
+  "version": "0.0.1",
+  "authors": [
+    "Pierre"
+  ],
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "fs",
+    "file-system",
+    "file",
+    "system",
+    "interface"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
