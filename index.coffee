@@ -19,7 +19,7 @@ file =
 	path: "/home/pierre/test"
 	name: "test"
 	type: "ASCII text"
-	content: {} # to be requested
+	content: {} # if size < 10kb
 
 
 
@@ -44,7 +44,7 @@ readDir = (pth, stats, callback) ->
 		name: path.basename pth
 		inside: []
 
-	r.inside.push
+	unless pth is "/" then r.inside.push
 		path: parent pth
 		name: ".."
 
@@ -67,7 +67,7 @@ readFile = (pth, stats, callback) ->
 		type: "unknown"
 		size: stats.size
 
-	if r.size < 10**5 # 10 ko
+	if r.size < 10**5 * 8# 10 ko
 		fs.readFile r.path, {encoding: "utf-8"}, (err, data) ->
 			r.content = data
 			callback err, r

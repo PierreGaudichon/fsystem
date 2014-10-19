@@ -50,10 +50,12 @@
       name: path.basename(pth),
       inside: []
     };
-    r.inside.push({
-      path: parent(pth),
-      name: ".."
-    });
+    if (pth !== "/") {
+      r.inside.push({
+        path: parent(pth),
+        name: ".."
+      });
+    }
     return fs.readdir(pth, function(err, files) {
       var f, _i, _len, _ref;
       r.size = files.length;
@@ -78,7 +80,7 @@
       type: "unknown",
       size: stats.size
     };
-    if (r.size < Math.pow(10, 5)) {
+    if (r.size < Math.pow(10, 5) * 8) {
       return fs.readFile(r.path, {
         encoding: "utf-8"
       }, function(err, data) {
