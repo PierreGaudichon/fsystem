@@ -29,3 +29,8 @@ node_modules
 
 # Bower
 bower_components
+
+# js and styl files
+*.js
+public/*.js
+public/*.css
