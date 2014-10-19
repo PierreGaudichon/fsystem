@@ -2,6 +2,27 @@
 (function() {
   var ItemView, parent;
 
+  (function($) {
+    var all, sideburns;
+    all = {};
+    sideburns = function(name, data) {
+      $(this).html(Mustache.render(all[name], data));
+      return this;
+    };
+    $(function() {
+      return $("[type='x-tmpl-mustache']").each((function(_this) {
+        return function(k, t) {
+          var name, template;
+          template = $(t).html();
+          name = $(t).attr("id");
+          Mustache.parse(template);
+          return all[name] = template;
+        };
+      })(this));
+    });
+    return $.fn.sideburns = sideburns;
+  })(jQuery);
+
   parent = function(pth) {
     pth = _.compact(pth.split("/"));
     if (pth.length === 0) {
@@ -111,7 +132,10 @@
   $(function() {
     var view;
     view = new ItemView($(".view"));
-    return view.initialize();
+    view.initialize();
+    return $(".test div").sideburns("folderView", {
+      a: "e"
+    });
   });
 
 }).call(this);
