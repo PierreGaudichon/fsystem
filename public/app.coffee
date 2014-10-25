@@ -97,6 +97,7 @@ class ItemView
 		$.getJSON "open", {@path}
 			.done (data) =>
 				@item = data
+				@item.parent = new AbsolutePath(@item.path).parent().str()
 				@path = @item.path
 				@template()
 			.fail =>
