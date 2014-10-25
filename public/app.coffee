@@ -84,8 +84,9 @@ augmentData = (data) ->
 	data.name = pth.name()
 	if data.inside
 		data.inside = _.map data.inside, (i) ->
-			pth = new AbsolutePath i
+			pth = new AbsolutePath i.path
 			r =
+				item: i.item
 				path: pth.path()
 				name: pth.name()
 				hidden: pth.isHidden()
@@ -110,6 +111,7 @@ class ItemView
 		$.getJSON "open", {@path}
 			.done (data) =>
 				@item = augmentData data
+				console.log @item
 				@path = @item.path
 				@template()
 			.fail =>

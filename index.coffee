@@ -1,6 +1,7 @@
 express = require "express"
 path = require "path"
 fs = require "fs"
+async = require "async"
 #_ = require "lodash"
 app = express()
 
@@ -22,6 +23,24 @@ file =
 
 
 
+augmentPath = (pth, callback) ->
+	fs.lstat pth, (err, stat) ->
+		if err
+			callback err,
+				path: pth
+				item: "unknown"
+
+		if stat.isFile()
+			item = "file"
+		else if stat.isDirectory()
+			item = "folder"
+
+		callback null,
+			path: pth
+			item: item
+
+
+
 readDir = (pth, stats, callback) ->
 	r =
 		item: "folder"
@@ -30,10 +49,12 @@ readDir = (pth, stats, callback) ->
 
 	fs.readdir pth, (err, files=[]) ->
 		r.size = files.length
-		for f in files
-			r.inside.push path.join pth, f
-
-		callback err, r
+		async.map files,
+			(i, callback) ->
+				augmentPath path.join(pth, i), callback
+			(err, result) ->
+				r.inside = result
+				callback err, r
 
 
 
@@ -66,20 +87,20 @@ app.get "/open", (req, res) ->
 	console.log "/open : #{pth}"
 
 	fs.lstat pth, (err, stats) ->
-		if err then res.send "error-stats", 500
+		if err then res.status(500).send "error-stats"
 
 		if stats.isDirectory()
 			readDir pth, stats, (err, data) ->
-				if err then res.send "error-folder", 500
+				if err then res.status(500).send "error-folder"
 				res.send JSON.stringify data
 
 		else if stats.isFile()
 			readFile pth, stats, (err, data) ->
-				if err then res.send "error-file", 500
+				if err then res.status(500).send "error-file"
 				res.send JSON.stringify data
 
 		else
-			if err then res.send "error-fileType", 500
+			if err then res.status(500).send "error-fileType"
 
 
 
