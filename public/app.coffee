@@ -105,9 +105,17 @@ class ItemView
 	item: {}
 
 
-	constructor: (view, breadcrumb) ->
+	constructor: (view) ->
 		@view = $ view
-		@breadcrumb = $ breadcrumb
+		@breadcrumb = creates("div").attr("<cl></cl>ass", "breadcrumb").appendTo @view
+		@list = creates("div").attr("class", "list").appendTo @view
+
+		at = @
+		@view.on "click", "[data-open]", ->
+			at.open $(@).data("open")
+
+
+
 
 	open: (@path)->
 		$.getJSON "open", {@path}
@@ -129,11 +137,11 @@ class ItemView
 
 
 	templateFolder: ->
-		@view.sideburns "folder", @item
+		@list.sideburns "folder", @item
 
 
 	templateFile: ->
-		@view.sideburns "file", @item
+		@list.sideburns "file", @item
 
 
 	templateBreadcrunb: ->
@@ -146,11 +154,6 @@ class ItemView
 
 
 $ ->
-	view = new ItemView "#mainView", "#breadcrumbView"
+	view = new ItemView "#mainView"
 	view.initialize()
 	view.open("/home/pierre/dev/fsystem")
-
-
-	$(document).on "click", "[data-open]", ->
-		view.open $(@).data("open")
-

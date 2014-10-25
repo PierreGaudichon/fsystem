@@ -72,6 +72,7 @@ readFile = (pth, stats, callback) ->
 			callback err, r
 
 	else
+		r.isTooBig = true
 		callback null, r
 
 

@@ -17,9 +17,9 @@
 <body>
 
 	<script id="folder" type="x-tmpl-mustache">
-		Folder
-		<h2>{{name}}</h2>
+		<h1>Folder</h1>
 		<strong data-open="{{parent}}">Parent</strong>
+		<h2>{{name}}</h2>
 		<ul class="list">{{#inside}}
 			<li
 				data-open="{{path}}"
@@ -35,20 +35,24 @@
 	</script>
 
 	<script id="file" type="x-tmpl-mustache">
-		File
-		<h2>{{name}}</h2>
+		<h1>File</h1>
 		<strong data-open="{{parent}}">Parent</strong>
-		<pre>{{content}}</pre>
+		<h2>{{name}}</h2>
+		{{#isTooBig}}
+			<p>This file is too big (> 10 ko).</p>
+		{{/isTooBig}}
+		{{^isTooBig}}
+			<pre>{{content}}</pre>
+		{{/isTooBig}}
 	</script>
 
 	<script id="breadcrumb" type="x-tmpl-mustache">
-		Breadcrumb
+		<h1>Breadcrumb</h1>
 		<ul class="breadcrumb">{{#breadcrumb}}
 			<li data-open="{{path}}">{{name}}</li>
 		{{/breadcrumb}}</ul>
 	</script>
 
-	<div id="breadcrumbView"></div>
 	<div id="mainView"></div>
 
 </body>
