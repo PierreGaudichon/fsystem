@@ -21,7 +21,16 @@
 		<h2>{{name}}</h2>
 		<strong data-open="{{parent}}">Parent</strong>
 		<ul class="list">{{#inside}}
-			<li data-open="{{path}}" class="{{#hidden}}hidden{{/hidden}}">{{name}}</li>
+			<li
+				data-open="{{path}}"
+				class="
+					{{#isFile}}file {{/isFile}}
+					{{#hidden}}hidden {{/hidden}}
+					{{#isFolder}}folder {{/isFolder}}
+				"
+			>
+				{{name}}
+			</li>
 		{{/inside}}</ul>
 	</script>
 
@@ -39,7 +48,6 @@
 		{{/breadcrumb}}</ul>
 	</script>
 
-	<i class="fa fa-bolt"></i>
 	<div id="breadcrumbView"></div>
 	<div id="mainView"></div>
 

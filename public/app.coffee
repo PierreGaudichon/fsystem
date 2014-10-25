@@ -90,6 +90,8 @@ augmentData = (data) ->
 				path: pth.path()
 				name: pth.name()
 				hidden: pth.isHidden()
+				isFolder: i.item == "folder"
+				isFile: i.item == "file"
 			return r
 	return data
 
