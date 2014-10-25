@@ -2,6 +2,7 @@ express = require "express"
 path = require "path"
 fs = require "fs"
 async = require "async"
+mime = require "mime"
 #_ = require "lodash"
 app = express()
 
@@ -21,6 +22,34 @@ file =
 	type: "ASCII text"
 	content: {} # if size < 10kb
 
+
+# http://stackoverflow.com/a/24977085
+# to coffeescript
+# with modification
+streamContent = (req, res, file) ->
+	range = req.headers.range || "bytes=0-" # the or contiditon is not tested enought
+	positions = range.replace(/bytes=/, "").split "-"
+	start = parseInt positions[0], 10
+
+	fs.stat file, (err, stats) ->
+		if err
+			res.status(404).send()
+		else
+			total = stats.size
+			end = if positions[1] then parseInt(positions[1], 10) else total - 1
+			chunksize = (end - start) + 1
+
+			res.writeHead 206,
+				"Content-Range": "bytes #{start}-#{end}/#{total}",
+				"Accept-Ranges": "bytes",
+				"Content-Length": chunksize,
+				"Content-Type": mime.lookup file
+
+			stream = fs.createReadStream file, {start, end}
+				.on "open", () ->
+					stream.pipe res
+				.on "error", (err) ->
+					res.end err
 
 
 augmentPath = (pth, callback) ->
@@ -102,6 +131,12 @@ app.get "/open", (req, res) ->
 
 		else
 			if err then res.status(500).send "error-fileType"
+
+
+
+app.get "/file/:name", (req, res) ->
+	streamContent req, res, "test-files/#{req.param 'name'}"
+
 
 
 
