@@ -67,6 +67,7 @@ augmentPath = (pth, callback) ->
 		callback null,
 			path: pth
 			item: item
+			type: mime.lookup pth
 
 
 
@@ -92,7 +93,7 @@ readFile = (pth, stats, callback) ->
 		item: "file"
 		path: pth
 		name: path.basename pth
-		type: "unknown"
+		type: mime.lookup pth
 		size: stats.size
 
 	if r.size < 10**5 * 8 # 10 ko
@@ -134,8 +135,15 @@ app.get "/open", (req, res) ->
 
 
 
-app.get "/file/:name", (req, res) ->
-	streamContent req, res, "test-files/#{req.param 'name'}"
+# Tests files
+# /home/pierre/dev/fsystem/test-files/MF2.pdf
+# /home/pierre/dev/fsystem/test-files/MF2.pdf
+# http://127.0.0.1:1337/file?path=/home/pierre/dev/fsystem/test-files/movie.pdf
+# http://127.0.0.1:1337/file?path=/home/pierre/dev/fsystem/test-files/MF2.pdf
+app.get "/file", (req, res) ->
+	pth = req.param "path"
+	console.log "/file : #{pth}"
+	streamContent req, res, pth
 
 
 

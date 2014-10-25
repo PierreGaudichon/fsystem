@@ -67,6 +67,10 @@ class AbsolutePath
 		@name()[0] == "."
 
 
+	withoutLeading: ->
+		@arr.join "/"
+
+
 
 cl.param.defaultHtm = "pjson"
 
@@ -87,6 +91,7 @@ augmentData = (data) ->
 			pth = new AbsolutePath i.path
 			r =
 				item: i.item
+				type: i.type
 				path: pth.path()
 				name: pth.name()
 				hidden: pth.isHidden()
@@ -100,6 +105,7 @@ augmentData = (data) ->
 class ItemView
 
 	view: "jQuery"
+	list: "jQuery"
 	breadcrumb: "jQuery"
 	path: "/"
 	item: {}
@@ -107,14 +113,12 @@ class ItemView
 
 	constructor: (view) ->
 		@view = $ view
-		@breadcrumb = creates("div").attr("<cl></cl>ass", "breadcrumb").appendTo @view
+		@breadcrumb = creates("div").attr("class", "breadcrumb").appendTo @view
 		@list = creates("div").attr("class", "list").appendTo @view
 
 		at = @
 		@view.on "click", "[data-open]", ->
 			at.open $(@).data("open")
-
-
 
 
 	open: (@path)->
@@ -141,7 +145,11 @@ class ItemView
 
 
 	templateFile: ->
-		@list.sideburns "file", @item
+		console.log @item
+		if @item.isTooBig
+			window.location.replace "file?path=#{@path}"
+		else
+			@list.sideburns "file", @item
 
 
 	templateBreadcrunb: ->
@@ -156,4 +164,4 @@ class ItemView
 $ ->
 	view = new ItemView "#mainView"
 	view.initialize()
-	view.open("/home/pierre/dev/fsystem")
+	view.open "/home/pierre/dev/fsystem"
