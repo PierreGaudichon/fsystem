@@ -1,8 +1,7 @@
 express = require "express"
 path = require "path"
 fs = require "fs"
-_ = require "lodash"
-#istextorbinary = require "istextorbinary"
+#_ = require "lodash"
 app = express()
 
 
@@ -24,15 +23,6 @@ file =
 
 
 
-parent = (pth) ->
-	pth = _.compact pth.split "/"
-	if pth.length == 0
-		"/"
-	else
-		pth.length -= 1
-		"/" + pth.join "/"
-
-
 readDir = (pth, stats, callback) ->
 	r =
 		item: "folder"
@@ -40,11 +30,7 @@ readDir = (pth, stats, callback) ->
 		name: path.basename pth
 		inside: []
 
-	#unless pth is "/" then r.inside.push
-	#	path: parent pth
-	#	name: ".."
-
-	fs.readdir pth, (err, files) ->
+	fs.readdir pth, (err, files=[]) ->
 		r.size = files.length
 		for f in files
 			r.inside.push
@@ -63,8 +49,8 @@ readFile = (pth, stats, callback) ->
 		type: "unknown"
 		size: stats.size
 
-	if r.size < 10**5 * 8# 10 ko
-		fs.readFile r.path, {encoding: "utf-8"}, (err, data) ->
+	if r.size < 10**5 * 8 # 10 ko
+		fs.readFile r.path, {encoding: "utf-8"}, (err, data="") ->
 			r.content = data
 			callback err, r
 
@@ -84,17 +70,20 @@ app.get "/open", (req, res) ->
 	console.log "/open : #{pth}"
 
 	fs.lstat pth, (err, stats) ->
+		if err then res.send "error-stats", 500
 
 		if stats.isDirectory()
 			readDir pth, stats, (err, data) ->
+				if err then res.send "error-folder", 500
 				res.send JSON.stringify data
 
 		else if stats.isFile()
 			readFile pth, stats, (err, data) ->
+				if err then res.send "error-file", 500
 				res.send JSON.stringify data
 
 		else
-			res.send ""
+			if err then res.send "error-fileType", 500
 
 
 
