@@ -16,5 +16,4 @@ Go to : `localhost:1337`.
 Todo
 ----
 
- - deal with permissions errors (ex : fs.readdir /home/lost+found)
- - prevent the server from crashing
+ - prevent small binary files to be shown in the interface.
