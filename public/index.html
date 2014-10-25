@@ -7,32 +7,38 @@
 	<script src="lodash/dist/lodash.js"></script>
 	<script src="mustache.js/mustache.js"></script>
 	<script src="jquery/dist/jquery.js"></script>
+	<script src="cl.js"></script>
 	<script src="app.js"></script>
 
-	<link rel="stylesheet" href="app.css">
+	<!--<link rel="stylesheet" href="app.css">-->
 
 </head>
 <body>
 
-	<script id="folderView" type="x-tmpl-mustache">
-		{{a}}
+	<script id="folder" type="x-tmpl-mustache">
+		Folder
+		<h2>{{name}}</h2>
+		<ul class="list">{{#inside}}
+			<li data-open="{{path}}">{{name}}</li>
+		{{/inside}}</ul>
 	</script>
 
-	<div class="test">
-		<p>TEST</p>
-		<div></div>
-	</div>
+	<script id="file" type="x-tmpl-mustache">
+		File
+		<h2>{{name}}</h2>
+		<pre>{{content}}</pre>
+	</script>
 
-	<h1>fsystem</h1>
+	<script id="breadcrumb" type="x-tmpl-mustache">
+		Breadcrumb
+		<ul class="breadcrumb">{{#breadcrumb}}
+			<li data-open="{{path}}">{{name}}</li>
+		{{/breadcrumb}}</ul>
+	</script>
 
-	<div class="view">
-		<ul class="list"></ul>
-		<div class="content">
-			<p class="parent"></p>
-			<h2></h2>
-			<pre></pre>
-		</div>
-	</div>
+
+	<div id="breadcrumbView"></div>
+	<div id="mainView"></div>
 
 </body>
 </html>

@@ -1,5 +1,4 @@
 
-
 do ($ = jQuery) ->
 
 	all = {}
@@ -18,95 +17,122 @@ do ($ = jQuery) ->
 	$.fn.sideburns = sideburns
 
 
+creates = (el, txt) -> $("<#{el} />").text(txt)
+
+
+class AbsolutePath
+
+	@fromArray: (arr) ->
+		a = new AbsolutePath
+		a.arr = arr
+		return a
+
+
+	arr: []
+
+
+	constructor: (str="/") ->
+		@arr = @strToArr str
+
+
+	strToArr: (str) ->
+		_.compact str.split "/"
+
+
+	path: -> @str()
+	str: ->
+		"/" + @arr.join "/"
+
+
+	name: ->
+		@arr[@arr.length-1] || "/"
+
+
+	parent: ->
+		if @arr.length == 0
+			new AbsolutePath
+		else
+			arr = _.clone @arr
+			arr.length -= 1
+			AbsolutePath.fromArray arr
+
+
+	breadcrumb: ->
+		pth = []
+		r = []
+		for i in @arr
+			pth.push i
+			p = AbsolutePath.fromArray pth
+			r.push
+				path: p.path()
+				name: p.name()
+		return r
 
 
 
-parent = (pth) ->
-	pth = _.compact pth.split "/"
-	if pth.length == 0
-		"/"
-	else
-		pth.length -= 1
-		"/" + pth.join "/"
+
+cl.param.defaultHtm = "pjson"
+
+
+
+removeHidden = (files) ->
+	_.filter files, (f) -> f[0] != "."
+
 
 
 
 class ItemView
 
-	el: "jQuery"
+	view: "jQuery"
+	breadcrumb: "jQuery"
 	path: "/"
 	item: {}
 
 
-	constructor: (@el) ->
-		@list = @el.find ".list"
-		@content = @el.find ".content"
-		@title = $ "head title"
-		@header = $ "h1"
-
+	constructor: (view, breadcrumb) ->
+		@view = $ view
+		@breadcrumb = $ breadcrumb
 
 	open: (@path)->
 		$.getJSON "open", {@path}
 			.done (data) =>
 				@item = data
+				@path = @item.path
 				@template()
 			.fail =>
-				@header.text "Server Error."
 				console.log "fail loading : #{@path}."
 		return null
 
 
 	template: ->
-		@title.text @item.name
-		@header.text "fsystem - #{@item.name}"
+		@templateBreadcrunb()
 		switch @item.item
 			when "folder" then @templateFolder()
 			when "file" then @templateFile()
 
 
 	templateFolder: ->
-		@templateEmpty()
-		for item in @item.inside
-			do (item) =>
-				el = $ "<li />"
-					.text item.name
-					.click =>
-						@open item.path
-				@list.append el
-		return null
+		@view.sideburns "folder", @item
 
 
 	templateFile: ->
-		@templateEmpty()
-		p = parent @item.path
-		@content.find(".parent")
-			.text p
-			.click =>
-				@open p
-		@content.find("h2").text @item.name
-		@content.find("pre").text @item.content || "Not a text file."
+		@view.sideburns "file", @item
+
+	templateBreadcrunb: ->
+		bc = new AbsolutePath(@path).breadcrumb()
+		@breadcrumb.sideburns "breadcrumb", {breadcrumb: bc}
 
 
-	templateEmpty: ->
-		@list.empty()
-		@content.children().empty()
-
-
-	initialize: ->
-		$.getJSON "root"
-			.done (data) =>
-				@open data.root
-			.fail ->
-				console.log "root : failed"
-
-
+	initialize: -> @open()
 
 
 
 $ ->
-	view = new ItemView $ ".view"
+	view = new ItemView "#mainView", "#breadcrumbView"
 	view.initialize()
+	view.open("/home/pierre/dev/fsystem")
 
-	$(".test div").sideburns "folderView", {a: "e"}
 
+	$(document).on "click", "[data-open]", ->
+		view.open $(@).data("open")
 
