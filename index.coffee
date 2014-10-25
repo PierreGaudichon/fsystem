@@ -5,6 +5,7 @@ fs = require "fs"
 app = express()
 
 
+
 root = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
 
 folder =
@@ -12,7 +13,6 @@ folder =
 	name: "pierre"
 	size: 15
 	inside: []
-
 
 file =
 	path: "/home/pierre/test"
@@ -22,20 +22,16 @@ file =
 
 
 
-
 readDir = (pth, stats, callback) ->
 	r =
 		item: "folder"
 		path: pth
-		name: path.basename pth
 		inside: []
 
 	fs.readdir pth, (err, files=[]) ->
 		r.size = files.length
 		for f in files
-			r.inside.push
-				path: path.join pth, f
-				name: f
+			r.inside.push path.join pth, f
 
 		callback err, r
 
