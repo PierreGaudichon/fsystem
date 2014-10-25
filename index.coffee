@@ -6,7 +6,7 @@ _ = require "lodash"
 app = express()
 
 
-
+root = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
 
 folder =
 	path: "/home/pierre"
@@ -21,10 +21,6 @@ file =
 	type: "ASCII text"
 	content: {} # if size < 10kb
 
-
-
-removeHidden = (files) ->
-	_.filter files, (f) -> f[0] != "."
 
 
 
@@ -44,13 +40,13 @@ readDir = (pth, stats, callback) ->
 		name: path.basename pth
 		inside: []
 
-	unless pth is "/" then r.inside.push
-		path: parent pth
-		name: ".."
+	#unless pth is "/" then r.inside.push
+	#	path: parent pth
+	#	name: ".."
 
 	fs.readdir pth, (err, files) ->
 		r.size = files.length
-		for f in removeHidden files
+		for f in files
 			r.inside.push
 				path: path.join pth, f
 				name: f
@@ -83,13 +79,8 @@ app.use express.static path.join __dirname, "node_modules"
 
 
 
-app.get "/root", (req, res) ->
-	home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
-	res.send JSON.stringify {root: home}
-
-
 app.get "/open", (req, res) ->
-	pth = req.query.path
+	pth = req.query.path || root
 	console.log "/open : #{pth}"
 
 	fs.lstat pth, (err, stats) ->
