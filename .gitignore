@@ -34,3 +34,6 @@ bower_components
 *.js
 public/*.js
 public/*.css
+
+# tests
+test-files/

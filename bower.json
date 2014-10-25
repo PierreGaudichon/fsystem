@@ -24,6 +24,8 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "mustache.js": "~0.8.2"
+    "mustache.js": "~0.8.2",
+    "font-awesome": "~4.2.0",
+    "livequery": "https://github.com/brandonaaron/livequery.git#~1.1.1"
   }
 }
