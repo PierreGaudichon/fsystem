@@ -113,6 +113,10 @@ removeHidden = (files) ->
 	_.filter files, (f) -> f[0] != "."
 
 
+filterByItem = (items, type) ->
+	_.filter items, (i) ->
+		i.item is type
+
 
 
 
@@ -151,7 +155,7 @@ class ItemView
 		data.name = pth.name()
 		data.previous = @previous()
 		if data.inside
-			data.inside = _.map data.inside, (i) ->
+			data.inside = @foldersFirst _.map data.inside, (i) ->
 				pth = new AbsolutePath i.path
 				r =
 					item: i.item
@@ -165,6 +169,12 @@ class ItemView
 				return r
 		return data
 
+
+	foldersFirst: (inside) ->
+		folder = filterByItem inside, "folder"
+		file = filterByItem inside, "file"
+		other = filterByItem inside, undefined
+		return folder.concat(file).concat(other)
 
 	open: (@path, history = true)->
 		$.getJSON "open", {@path}
