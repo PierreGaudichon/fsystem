@@ -101,24 +101,7 @@ removeHidden = (files) ->
 
 
 
-augmentData = (data) ->
-	pth = new AbsolutePath(data.path)
-	data.parent =  pth.parent().str()
-	data.hidden = pth.isHidden()
-	data.name = pth.name()
-	if data.inside
-		data.inside = _.map data.inside, (i) ->
-			pth = new AbsolutePath i.path
-			r =
-				item: i.item
-				type: i.type
-				path: pth.path()
-				name: pth.name()
-				hidden: pth.isHidden()
-				isFolder: i.item == "folder"
-				isFile: i.item == "file"
-			return r
-	return data
+
 
 
 
@@ -129,6 +112,7 @@ class ItemView
 	breadcrumb: "jQuery"
 	path: "/"
 	item: {}
+	history: []
 
 
 	constructor: (view) ->
@@ -136,16 +120,45 @@ class ItemView
 		@breadcrumb = creates("div").attr("class", "breadcrumb").appendTo @view
 		@list = creates("div").attr("class", "list").appendTo @view
 
+		@history = []
+
 		at = @
 		@view.on "click", "[data-open]", ->
 			at.open $(@).data("open")
 
+		@view.on "click", "[data-previous]", ->
+			at.history.pop() if at.history.length > 1
+			at.open $(@).data("previous"), false
 
-	open: (@path)->
+
+	augmentData: (data) ->
+		pth = new AbsolutePath(data.path)
+		data.parent =  pth.parent().str()
+		data.hidden = pth.isHidden()
+		data.name = pth.name()
+		data.previous = @previous()
+		if data.inside
+			data.inside = _.map data.inside, (i) ->
+				pth = new AbsolutePath i.path
+				r =
+					item: i.item
+					type: i.type
+					path: pth.path()
+					name: pth.name()
+					hidden: pth.isHidden()
+					isFolder: i.item == "folder"
+					isFile: i.item == "file"
+				return r
+		return data
+
+
+	open: (@path, history = true)->
 		$.getJSON "open", {@path}
 			.done (data) =>
-				@item = augmentData data
 				console.log @item
+				console.log @history
+				@item = @augmentData data
+				if history then @history.push @path
 				@path = @item.path
 				@template()
 			.fail =>
@@ -168,12 +181,20 @@ class ItemView
 		@list.sideburns "file", @item
 		#window.location.replace "file?path=#{@path}"
 
+
 	templateBreadcrunb: ->
 		breadcrumb = new AbsolutePath(@path).breadcrumb()
 		@breadcrumb.sideburns "breadcrumb", {breadcrumb}
 
 
 	initialize: -> @open()
+
+
+	previous: ->
+		if @history.length == 0
+			@path
+		else
+			@history[@history.length-1]
 
 
 
