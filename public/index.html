@@ -10,14 +10,15 @@
 	<script src="cl.js"></script>
 	<script src="app.js"></script>
 
+	<link rel="stylesheet" href="reset-css/reset.css">
 	<link rel="stylesheet" href="font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="app.css">
+	<script src="prefixfree/prefixfree.min.js"></script>
 
 </head>
 <body>
 
 	<script id="folder" type="x-tmpl-mustache">
-		<h1>Folder</h1>
 		<strong data-open="{{parent}}">Parent</strong>
 		<h2>{{name}}</h2>
 		<ul class="list">{{#inside}}
@@ -35,22 +36,27 @@
 	</script>
 
 	<script id="file" type="x-tmpl-mustache">
-		<h1>File</h1>
 		<strong data-open="{{parent}}">Parent</strong>
 		<h2>{{name}}</h2>
-		{{^isTooBig}}
-			<pre>{{content}}</pre>
-		{{/isTooBig}}
+		<p>Content not shown.</p>
 	</script>
 
 	<script id="breadcrumb" type="x-tmpl-mustache">
-		<h1>Breadcrumb</h1>
-		<ul class="breadcrumb">{{#breadcrumb}}
+		<ul>{{#breadcrumb}}
 			<li data-open="{{path}}">{{name}}</li>
 		{{/breadcrumb}}</ul>
 	</script>
 
-	<div id="mainView"></div>
+	<div class="leftMenu">
+		<div class="openButton"><i class="fa fa-navicon"></i></div>
+		<ul>
+			<li><i class="fa fa-home"></i></li>
+			<li><i class="fa fa-folder"></i></li>
+			<li><i class="fa fa-file"></i></li>
+			<li><i class="fa fa-arrow-up"></i></li>
+		</ul>
+	</div>
+	<div id="mainView" class="listView"></div>
 
 </body>
 </html>

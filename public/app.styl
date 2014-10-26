@@ -1,11 +1,135 @@
+turquoise = #1abc9c
+emerland = #2ecc71
+peterriver = #3498db
+amethyst = #9b59b6
+wetasphalt = #34495e
+greensea = #16a085
+nephritis = #27ae60
+belizehole = #2980b9
+wisteria = #8e44ad
+midnightblue = #2c3e50
+sunflower = #f1c40f
+carrot = #e67e22
+alizarin = #e74c3c
+clouds = #ecf0f1
+concrete = #95a5a6
+orange = #f39c12
+pumpkin = #d35400
+pomegranate = #c0392b
+silver = #bdc3c7
+asbestos = #7f8c8d
+
+// http://demo.tutorialzine.com/2014/09/cute-file-browser-jquery-ajax-php/#files
+fb-background = #23232e
+fb-item = #373743
+fb-item-hover = #42424E
 
 
-[data-open]
-	cursor pointer
+@font-face
+    font-family bigJohn
+    src url(fonts/big-john.otf) format("otf")
 
-.folder
-	color darken(#3498db, 30%)
 
-.hidden
-	color #95a5a6
-	display none
+html, body
+	height 100%
+	width 100%
+	background-color midnightblue
+	color clouds
+
+
+transition()
+	transition all 200ms ease-out
+
+square(s)
+	height s
+	width s
+
+square-button(s)
+	square s
+	text-align center
+	line-height s
+
+
+.leftMenu
+	position fixed
+	top 0
+	bottom 0
+	left -80px
+	width 160px
+	transition()
+
+	.openButton
+		position absolute
+		top 0
+		bottom 0
+		right 0
+		width 80px
+		z-index 8
+
+		i
+			display block
+			square-button 80px
+			font-size 1.2em
+			color black
+			transition all 200ms ease-in
+
+	ul
+		position absolute
+		top 0
+		bottom 0
+		left 0
+		width 80px
+		background-color black
+		z-index 10
+
+	&:hover
+		left 0px
+		width 80px
+
+	li
+		square-button 80px
+		color orange
+		cursor pointer
+		transition()
+
+		&:hover
+			color pumpkin
+
+		i
+			font-size 1.2em
+
+
+.listView
+	margin-left 80px
+
+	.breadcrumb
+		height 40px
+
+		li
+			display inline-block
+			height 40px
+			padding-right 20px
+			line-height 40px
+			transition()
+
+			&:before
+				display inline-block
+				height 40px
+				width 40px
+				text-align center
+				font-family FontAwesome
+				content "\f105"
+
+			&:hover
+				background-color wetasphalt
+
+	.list
+
+	[data-open]
+		cursor pointer
+
+	.folder
+		color concrete
+
+	.hidden
+		display none
