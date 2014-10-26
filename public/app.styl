@@ -26,8 +26,16 @@ fb-item-hover = #42424E
 
 
 @font-face
-    font-family bigJohn
-    src url(fonts/big-john.otf) format("otf")
+	font-family bigJohn
+	src url(fonts/big-john.otf) format("otf")
+
+
+.icon-file-pdf-o
+	color #e74c3c
+.icon-file-movie-o
+	color #16a085
+.icon-file-o
+	color #ecf0f1
 
 
 html, body
@@ -35,6 +43,7 @@ html, body
 	width 100%
 	background-color midnightblue
 	color clouds
+	cursor default
 
 
 transition()
@@ -48,6 +57,11 @@ square-button(s)
 	square s
 	text-align center
 	line-height s
+
+ashpalt-hover()
+	transition()
+	&:hover
+		background-color wetasphalt
 
 
 .leftMenu
@@ -100,7 +114,7 @@ square-button(s)
 
 
 .listView
-	margin-left 80px
+	margin-left 120px
 
 	.breadcrumb
 		height 40px
@@ -130,12 +144,39 @@ square-button(s)
 
 
 	.list
+		.title
+			vertical-align middle
+		.button
+			display inline-block
+			square-button 40px
+			ashpalt-hover()
 
-	[data-open]
+		h2
+			display inline-block
+			height 40px
+			padding-left 20px
+			line-height 40px
+
+		ul
+			margin-top 40px
+			margin-left 40px
+
+		li
+			vertical-align middle
+
+			.icon
+				display inline-block
+				square-button 30px
+				transition()
+
+			h3
+				display inline-block
+				height 30px
+				line-height 30px
+
+	[data-open], [data-previous]
 		cursor pointer
 
 	.folder
 		color concrete
 
-	.hidden
-		display none

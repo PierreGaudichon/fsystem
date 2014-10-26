@@ -26,22 +26,35 @@ creates = (el, txt) -> $("<#{el} />").text(txt)
 class MimeType
 
 	@correspondence:
-		pdf: [ "application/pdf" ]
-		video: [ "video/mp4", "video/x-matroska" ]
-		binary: [ "application/octet-stream" ]
+		pdf:
+			icon: "file-pdf-o"
+			type: [ "application/pdf" ]
+		video:
+			icon: "file-movie-o"
+			type: [ "video/mp4", "video/x-matroska" ]
+		binary:
+			icon: "file-o"
+			type: [ "application/octet-stream" ]
 
 
 	constructor: (@mime) ->
 
 
 	type: ->
-		for t, ms of @correspondence
-			for m in ms
+		for t, d of MimeType.correspondence
+			for m in d.type
 				if @mime is m
 					return t
-		return "application/octet-stream"
+		return "binary"
 
 
+	icon: (type)->
+		if type == "file"
+			MimeType.correspondence[@type()].icon
+		else if type == "folder"
+			"folder-o"
+		else
+			"file-o"
 
 
 
@@ -148,6 +161,7 @@ class ItemView
 					hidden: pth.isHidden()
 					isFolder: i.item == "folder"
 					isFile: i.item == "file"
+					icon: new MimeType(i.type).icon(i.item)
 				return r
 		return data
 
