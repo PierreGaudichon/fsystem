@@ -79,7 +79,7 @@ class AbsolutePath
 
 	breadcrumb: ->
 		pth = []
-		r = []
+		r = [{path: "/", name: "/"}]
 		for i in @arr
 			pth.push i
 			p = AbsolutePath.fromArray pth
