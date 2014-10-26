@@ -30,12 +30,6 @@ fb-item-hover = #42424E
 	src url(fonts/big-john.otf) format("otf")
 
 
-.icon-file-pdf-o
-	color #e74c3c
-.icon-file-movie-o
-	color #16a085
-.icon-file-o
-	color #ecf0f1
 
 
 html, body
@@ -79,6 +73,7 @@ ashpalt-hover()
 		right 0
 		width 80px
 		z-index 8
+		transition()
 
 		i
 			display block
@@ -99,6 +94,8 @@ ashpalt-hover()
 	&:hover
 		left 0px
 		width 80px
+		.openButton
+			opacity 0
 
 	li
 		square-button 80px
@@ -160,6 +157,7 @@ ashpalt-hover()
 		ul
 			margin-top 40px
 			margin-left 40px
+			margin-bottom 120px
 
 		li
 			vertical-align middle
@@ -173,6 +171,20 @@ ashpalt-hover()
 				display inline-block
 				height 30px
 				line-height 30px
+
+	colored(c)
+		transition()
+		color c
+		&:hover h3
+			color lighten(c, 30%)
+
+	.icon-file-pdf-o
+		colored alizarin
+	.icon-file-movie-o
+		colored greensea
+	.icon-file-o
+		colored clouds
+
 
 	[data-open], [data-previous]
 		cursor pointer

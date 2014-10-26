@@ -27,12 +27,13 @@
 			<li
 				data-open="{{path}}"
 				class="
+					icon-{{icon}}
 					{{#isFile}}file {{/isFile}}
 					{{#hidden}}hidden {{/hidden}}
 					{{#isFolder}}folder {{/isFolder}}
 				"
 			>
-				<div class="icon icon-{{icon}}"><i class="fa fa-{{icon}}"></i></div>
+				<div class="icon"><i class="fa fa-{{icon}}"></i></div>
 				<h3>{{name}}</h3>
 			</li>
 		{{/inside}}</ul>
@@ -44,7 +45,8 @@
 			<div class="button" data-open="{{parent}}"><i class="fa fa-level-up"></i></div>
 			<h2>{{name}}</h2>
 		</div>
-		<p>Content not shown.</p>
+		TODO : faire un affichage.
+		<pre>{{json}}</json>
 	</script>
 
 	<script id="breadcrumb" type="x-tmpl-mustache">

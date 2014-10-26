@@ -32,6 +32,9 @@ class MimeType
 		video:
 			icon: "file-movie-o"
 			type: [ "video/mp4", "video/x-matroska" ]
+		subtitle:
+			icon: "file-text-o"
+			type: [ "application/x-subrip" ]
 		binary:
 			icon: "file-o"
 			type: [ "application/octet-stream" ]
@@ -143,6 +146,7 @@ class ItemView
 		data.hidden = pth.isHidden()
 		data.name = pth.name()
 		data.previous = @previous()
+		data.json = JSON.stringify data, null, "\t"
 		if data.inside
 			data.inside =  ItemView.masterSort _.map data.inside, (i) ->
 				pth = new AbsolutePath i.path
@@ -161,9 +165,9 @@ class ItemView
 
 	@masterSortParam: [
 		{ hidden: false, isFolder: true }
-		##{ hidden: true, isFolder: true }
+		{ hidden: true, isFolder: true }
 		{ hidden: false, isFile: true }
-		##{ hidden: true, isFile: true }
+		{ hidden: true, isFile: true }
 	]
 
 
