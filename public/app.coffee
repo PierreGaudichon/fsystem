@@ -29,6 +29,12 @@ class MimeType
 		pdf:
 			icon: "file-pdf-o"
 			type: [ "application/pdf" ]
+		music:
+			icon: "music"
+			type: [ "audio/mpeg" ]
+		image:
+			icon: "image"
+			type: [ "image/jpeg" ]
 		video:
 			icon: "file-movie-o"
 			type: [ "video/mp4", "video/x-matroska" ]
@@ -164,10 +170,10 @@ class ItemView
 
 
 	@masterSortParam: [
-		{ hidden: false, isFolder: true }
 		{ hidden: true, isFolder: true }
-		{ hidden: false, isFile: true }
+		{ hidden: false, isFolder: true }
 		{ hidden: true, isFile: true }
+		{ hidden: false, isFile: true }
 	]
 
 
