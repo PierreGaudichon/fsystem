@@ -10,6 +10,8 @@ app = express()
 
 root = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
 
+
+
 folder =
 	path: "/home/pierre"
 	name: "pierre"
@@ -21,6 +23,8 @@ file =
 	name: "test"
 	type: "ASCII text"
 	content: {} # if size < 10kb
+
+
 
 
 # http://stackoverflow.com/a/24977085
@@ -50,6 +54,7 @@ streamContent = (req, res, file) ->
 					stream.pipe res
 				.on "error", (err) ->
 					res.end err
+
 
 
 augmentPath = (pth, callback) ->
@@ -96,14 +101,7 @@ readFile = (pth, stats, callback) ->
 		type: mime.lookup pth
 		size: stats.size
 
-	if r.size < 10**5 * 8 # 10 ko
-		fs.readFile r.path, {encoding: "utf-8"}, (err, data="") ->
-			r.content = data
-			callback err, r
-
-	else
-		r.isTooBig = true
-		callback null, r
+	callback null, r
 
 
 

@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+var mime = require("mime");
+var path = require("path");
+
+var file = process.argv[2];
+var name = path.basename(file);
+var type = mime.lookup(name);
+
+/*console.log({
+	file: file,
+	name: name,
+	type: type
+});*/
+
+console.log(type);

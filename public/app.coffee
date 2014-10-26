@@ -22,6 +22,31 @@ creates = (el, txt) -> $("<#{el} />").text(txt)
 
 
 
+
+class MimeType
+
+	@correspondence:
+		pdf: [ "application/pdf" ]
+		video: [ "video/mp4", "video/x-matroska" ]
+		binary: [ "application/octet-stream" ]
+
+
+	constructor: (@mime) ->
+
+
+	type: ->
+		for t, ms of @correspondence
+			for m in ms
+				if @mime is m
+					return t
+		return "application/octet-stream"
+
+
+
+
+
+
+
 class AbsolutePath
 
 	@fromArray: (arr) ->
@@ -65,11 +90,6 @@ class AbsolutePath
 
 	isHidden: ->
 		@name()[0] == "."
-
-
-	withoutLeading: ->
-		@arr.join "/"
-
 
 
 cl.param.defaultHtm = "pjson"
@@ -145,12 +165,8 @@ class ItemView
 
 
 	templateFile: ->
-		console.log @item
-		if @item.isTooBig
-			window.location.replace "file?path=#{@path}"
-		else
-			@list.sideburns "file", @item
-
+		@list.sideburns "file", @item
+		#window.location.replace "file?path=#{@path}"
 
 	templateBreadcrunb: ->
 		breadcrumb = new AbsolutePath(@path).breadcrumb()
@@ -163,5 +179,5 @@ class ItemView
 
 $ ->
 	view = new ItemView "#mainView"
-	view.initialize()
+	#view.initialize()
 	view.open "/home/pierre/dev/fsystem"
