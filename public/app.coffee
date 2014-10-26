@@ -109,17 +109,6 @@ cl.param.defaultHtm = "pjson"
 
 
 
-removeHidden = (files) ->
-	_.filter files, (f) -> f[0] != "."
-
-
-filterByItem = (items, type) ->
-	_.filter items, (i) ->
-		i.item is type
-
-
-
-
 
 
 class ItemView
@@ -155,7 +144,7 @@ class ItemView
 		data.name = pth.name()
 		data.previous = @previous()
 		if data.inside
-			data.inside = @foldersFirst _.map data.inside, (i) ->
+			data.inside =  ItemView.masterSort _.map data.inside, (i) ->
 				pth = new AbsolutePath i.path
 				r =
 					item: i.item
@@ -170,17 +159,28 @@ class ItemView
 		return data
 
 
-	foldersFirst: (inside) ->
-		folder = filterByItem inside, "folder"
-		file = filterByItem inside, "file"
-		other = filterByItem inside, undefined
-		return folder.concat(file).concat(other)
+	@masterSortParam: [
+		{ hidden: false, isFolder: true }
+		##{ hidden: true, isFolder: true }
+		{ hidden: false, isFile: true }
+		##{ hidden: true, isFile: true }
+	]
+
+
+	@masterSort: (inside) ->
+		r = []
+		for param in ItemView.masterSortParam
+			r.push _.filter inside, (i) ->
+				for k, v of param
+					if i[k] != v
+						return false
+				return true
+		return _.uniq _.flatten r
+
 
 	open: (@path, history = true)->
 		$.getJSON "open", {@path}
 			.done (data) =>
-				console.log @item
-				console.log @history
 				@item = @augmentData data
 				if history then @history.push @path
 				@path = @item.path
