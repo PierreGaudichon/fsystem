@@ -8,6 +8,7 @@
   },
   "scripts": {
     "install": "bower install; sh build_system.sh",
+    "test": "node lib/app.js -v -r .",
     "start": "node lib/app.js"
   },
   "keywords": [

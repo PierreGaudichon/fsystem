@@ -5,7 +5,7 @@ bower_components
 # compiled files
 *.js
 lib/*.js
-public/*.js
+public/js/
 public/*.css
 
 # tests

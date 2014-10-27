@@ -1,2 +1,3 @@
-coffee -c lib/*.coffee public/*.coffee
+coffee -c lib/*.coffee
+coffee -c -o public/js/ public/coffee/*.coffee
 stylus public/app.styl
