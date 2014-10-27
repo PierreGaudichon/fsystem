@@ -1,2 +1,2 @@
-coffee -c index.coffee public/*.coffee
+coffee -c lib/*.coffee public/*.coffee
 stylus public/app.styl

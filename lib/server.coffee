@@ -3,13 +3,8 @@ path = require "path"
 fs = require "fs"
 async = require "async"
 mime = require "mime"
-#_ = require "lodash"
-app = express()
 
-
-
-root = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
-
+{server, commander} = require "./app"
 
 
 folder =
@@ -24,6 +19,13 @@ file =
 	type: "ASCII text"
 	content: {} # if size < 10kb
 
+
+
+resolve = (pth) ->
+	if typeof pth is "string"
+		path.resolve path.join commander.root, pth
+	else
+		path.resolve commander.root
 
 
 
@@ -105,14 +107,14 @@ readFile = (pth, stats, callback) ->
 
 
 
-app.use express.static path.join __dirname, "public"
-app.use express.static path.join __dirname, "bower_components"
-app.use express.static path.join __dirname, "node_modules"
+server.use express.static path.join __dirname, "../public"
+server.use express.static path.join __dirname, "../bower_components"
+server.use express.static path.join __dirname, "../node_modules"
 
 
 
-app.get "/open", (req, res) ->
-	pth = req.query.path || root
+server.get "/open", (req, res) ->
+	pth = resolve req.query.path
 	console.log "/open : #{pth}"
 
 	fs.lstat pth, (err, stats) ->
@@ -138,11 +140,11 @@ app.get "/open", (req, res) ->
 # /home/pierre/dev/fsystem/test-files/MF2.pdf
 # http://127.0.0.1:1337/file?path=/home/pierre/dev/fsystem/test-files/movie.pdf
 # http://127.0.0.1:1337/file?path=/home/pierre/dev/fsystem/test-files/MF2.pdf
-app.get "/file", (req, res) ->
-	pth = req.param "path"
+server.get "/file", (req, res) ->
+	pth = resolve req.param "path"
 	console.log "/file : #{pth}"
 	streamContent req, res, pth
 
 
 
-app.listen 1337
+server.listen commander.port
