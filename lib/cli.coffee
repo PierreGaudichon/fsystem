@@ -7,8 +7,9 @@ mkdirp = require "mkdirp"
 
 commander
 	.version "0.0.1"
-	.option "-p, --port [number]", "Web server port.", 1337
-	.option "-r, --root [path]", "Root of the server.", "root"
+	.option "-p, --port [number=1337]", "Set the web server port.", 1337
+	.option "-r, --root [path=./root]", "Set the root of the server.", "root"
+	.option "-v, --verbose", "Display routing informations."
 	.parse process.argv
 
 

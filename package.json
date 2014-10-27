@@ -2,13 +2,11 @@
   "name": "fsystem",
   "version": "0.0.1",
   "description": "A simple web interface to the local file system.",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/PierreGaudichon/fsystem.git"
   },
   "scripts": {
-    "test": "mocha",
     "install": "bower install; sh build_system.sh",
     "start": "node lib/app.js"
   },

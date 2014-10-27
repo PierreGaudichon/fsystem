@@ -8,6 +8,12 @@ mime = require "mime"
 
 
 
+display = (str) ->
+	if commander.verbose
+		console.log str
+
+
+
 class File
 
 	@create = (r, s, c) -> new File r, s, c
@@ -128,7 +134,7 @@ server.use express.static path.join __dirname, "../node_modules"
 
 server.get "/open", (req, res) ->
 	new File req.query.path, false, (f) ->
-		console.log "/open : #{f.requestedPath}"
+		display "/open : #{f.requestedPath}"
 		f.send req, res
 
 
@@ -141,10 +147,10 @@ server.get "/open", (req, res) ->
 
 server.get "/file", (req, res) ->
 	new File req.param("path"), false, (f) ->
-		console.log "/file : #{f.requestedPath}"
+		display "/file : #{f.requestedPath}"
 		f.stream req, res
 
 
 
 server.listen commander.port
-console.log "Server started on port #{commander.port} and serving files from #{path.resolve commander.root}."
+display "Server started on port #{commander.port} and serving files from #{path.resolve commander.root}."
