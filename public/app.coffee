@@ -212,8 +212,8 @@ class ItemView
 
 
 	templateFile: ->
-		@list.sideburns "file", @item
-		#window.location.replace "file?path=#{@path}"
+		#@list.sideburns "file", @item
+		window.location.replace "file?path=#{@path}"
 
 
 	templateBreadcrunb: ->
@@ -221,7 +221,7 @@ class ItemView
 		@breadcrumb.sideburns "breadcrumb", {breadcrumb}
 
 
-	initialize: -> @open()
+	initialize: -> @open "/"
 
 
 	previous: ->
@@ -234,5 +234,4 @@ class ItemView
 
 $ ->
 	view = new ItemView "#mainView"
-	#view.initialize()
-	view.open "/home/pierre/dev/fsystem"
+	view.initialize()
