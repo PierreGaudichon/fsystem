@@ -3,8 +3,9 @@ commander = require "commander"
 
 
 
-module.exports.server = express()
-module.exports.commander = commander
+module.exports =
+	commander: commander
+	server: express()
 
 
 

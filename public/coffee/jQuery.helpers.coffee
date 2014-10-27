@@ -17,4 +17,4 @@ do ($ = jQuery) ->
 
 
 
-creates = (el, txt) -> $("<#{el} />").text(txt)
+window.creates = (el, txt) -> $("<#{el} />").text(txt)
